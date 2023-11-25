@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @ClassName SimpleMIApplication
  * @Description TODO
- * @Author 18451
+ * @Author CareShadow
  * @Date 2023/11/24 22:51
  * @Version 1.0
  **/
