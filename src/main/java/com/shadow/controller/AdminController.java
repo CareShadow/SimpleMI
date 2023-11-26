@@ -32,4 +32,14 @@ public class AdminController {
         String generate = JwtUtil.generate(user.getName());
         return generate;
     }
+
+    @GetMapping("/getUser")
+    public User getUser() {
+        User user = new User();
+        user.setName("zhangsan");
+        user.setAge(20);
+        // 注意哦，这里是直接返回的User类型，并没有用ResultVO进行包装
+        return user;
+    }
+
 }

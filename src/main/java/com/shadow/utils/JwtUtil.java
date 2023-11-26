@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
@@ -16,6 +17,7 @@ import java.util.Date;
  * @Date 2023/11/25 19:52
  * @Version 1.0
  **/
+@Slf4j
 public final class JwtUtil {
     private final static String secretKey = "careshadow";
     private final static Duration expiration = Duration.ofHours(2);
@@ -48,7 +50,7 @@ public final class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (JwtException e) {
-            System.out.println("解析失败!");;
+           log.debug("Token解析失败");
         }
         return claims;
     }

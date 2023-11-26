@@ -1,5 +1,7 @@
 package com.shadow.entity;
 
+import lombok.NoArgsConstructor;
+
 /**
  * @ClassName User
  * @Description TODO
@@ -7,11 +9,12 @@ package com.shadow.entity;
  * @Date 2023/11/25 23:07
  * @Version 1.0
  **/
+@NoArgsConstructor
 public class User {
     private String name;
-    private String age;
+    private int age;
 
-    public User(String name, String age) {
+    public User(String name, int age) {
         this.name = name;
         this.age = age;
     }
@@ -24,11 +27,11 @@ public class User {
         this.name = name;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 }
