@@ -11,7 +11,7 @@
             <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="VARCHAR"/>
-            <result property="createData" column="create_data" jdbcType="TIMESTAMP"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
             <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
             <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
             <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>

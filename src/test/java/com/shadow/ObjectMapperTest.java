@@ -1,9 +1,13 @@
 package com.shadow;
 
+import cn.hutool.core.lang.ObjectId;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shadow.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 /**
  * @ClassName ObjectMapperTest
@@ -23,5 +27,12 @@ public class ObjectMapperTest {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        System.out.println(UUID.randomUUID());
+    }
+
+    @Test
+    public void test01() {
+        String id = ObjectId.next();
+        System.out.println(id);
     }
 }

@@ -4,7 +4,7 @@ spring:
   application:
     name: SMI
   datasource:
-    url: jdbc:mysql://120.76.202.102:3306/snest-mi
+    url: jdbc:mysql://120.76.202.102:3306/snest-mi?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: root
     password: Liang2001...
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver

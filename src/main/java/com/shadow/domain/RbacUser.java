@@ -1,8 +1,9 @@
 package com.shadow.domain;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 
@@ -43,7 +44,7 @@ public class RbacUser implements Serializable {
     /**
      * 创建时间
      */
-    private Date createData;
+    private Date createDate;
 
     /**
      * 创建人

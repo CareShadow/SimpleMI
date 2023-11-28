@@ -1,7 +1,7 @@
 package com.shadow.mapper;
 
-import com.shadow.domain.RbacUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.shadow.domain.RbacUser;
 
 /**
 * @author Administrator
