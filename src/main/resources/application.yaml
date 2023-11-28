@@ -3,3 +3,8 @@ server:
 spring:
   application:
     name: SMI
+  datasource:
+    url: jdbc:mysql://120.76.202.102:3306/snest-mi
+    username: root
+    password: Liang2001...
+    driver-class-name: com.mysql.jdbc.Driver
