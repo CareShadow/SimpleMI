@@ -1,7 +1,10 @@
 package com.shadow.interceptors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shadow.context.UserContext;
+import com.shadow.enums.ResultCode;
 import com.shadow.utils.JwtUtil;
+import com.shadow.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -32,8 +35,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         response.setContentType("application/json;charset=utf-8");
+        ObjectMapper mapper = new ObjectMapper();
+        ResultVO resultVO = new ResultVO<String>(ResultCode.UNAUTHORIZED,"请先登录");
+        String responseStr = mapper.writeValueAsString(resultVO);
         PrintWriter out = response.getWriter();
-        out.write("请先登录");
+        out.write(responseStr);
         out.flush();
         out.close();
         return false;

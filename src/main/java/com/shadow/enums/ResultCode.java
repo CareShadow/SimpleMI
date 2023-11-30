@@ -11,9 +11,10 @@ import lombok.Getter;
  **/
 @Getter
 public enum ResultCode {
-    SUCCESS(1000, "操作成功"),
-    FAILED(1001, "响应失败"),
-    ERROR(5000, "未知错误");
+    SUCCESS(200, "操作成功"),
+    FAILED(201, "响应失败"),
+    UNAUTHORIZED(401, "未授权"),
+    ERROR(500, "未知错误");
 
     private int code;
     private String msg;
