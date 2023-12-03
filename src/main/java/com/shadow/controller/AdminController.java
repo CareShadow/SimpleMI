@@ -4,15 +4,13 @@ import cn.hutool.core.lang.ObjectId;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.shadow.context.UserContext;
 import com.shadow.domain.RbacUser;
 import com.shadow.enums.ResultCode;
 import com.shadow.service.RbacUserService;
 import com.shadow.utils.JwtUtil;
 import com.shadow.vo.ResultVO;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -60,6 +58,12 @@ public class AdminController {
         String token = JwtUtil.generate(user.getLogin());
         return rbacUser == null ? new ResultVO<String>(ResultCode.UNAUTHORIZED, "用户名或密码错误")
                 : new ResultVO<String>(token);
+    }
+
+    @GetMapping("/userInfo")
+    public ResultVO<String> userInfo() {
+        String currentUserName = UserContext.getCurrentUserName();
+        return new ResultVO<String>(currentUserName);
     }
 
 }
