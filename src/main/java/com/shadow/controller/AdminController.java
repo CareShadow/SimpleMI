@@ -60,10 +60,16 @@ public class AdminController {
                 : new ResultVO<String>(token);
     }
 
+    /**
+     * 获取当前账号信息
+     *
+     * @return
+     */
     @GetMapping("/userInfo")
     public ResultVO<String> userInfo() {
         String currentUserName = UserContext.getCurrentUserName();
         return new ResultVO<String>(currentUserName);
     }
+
 
 }
