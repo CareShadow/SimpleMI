@@ -3,6 +3,7 @@ package com.shadow.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shadow.vo.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -18,7 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @Version 1.0
  **/
 @RestControllerAdvice(basePackages = {"com.shadow.controller"})
-public class ResponseControllerAdvice implements ResponseBodyAdvice {
+@Slf4j
+public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
         // 如果接口返回的类型就是ResultVO那就没有必要进行额外的操作, 返回false;
@@ -33,7 +35,8 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice {
             try {
                 return objectMapper.writeValueAsString(new ResultVO<>(data));
             }catch (JsonProcessingException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
+                log.debug(e.getMessage());
             }
         }
         return new ResultVO<>(data);

@@ -56,6 +56,8 @@ public class BaseDataController {
      */
     @PostMapping("/connect")
     public ResultVO<String> connectDataSource(String dataSourceId) {
+        MiBaseDataSource datasource = dataSourceService.getById(dataSourceId);
+
         return new ResultVO<String>(null);
     }
 
