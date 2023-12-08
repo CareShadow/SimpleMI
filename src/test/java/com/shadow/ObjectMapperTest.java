@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shadow.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.SQLException;
 import java.util.UUID;
@@ -20,6 +23,8 @@ import java.util.UUID;
  * @Version 1.0
  **/
 @Slf4j
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class ObjectMapperTest {
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -40,7 +45,7 @@ public class ObjectMapperTest {
     }
 
     /**
-     * 测试数据源的连接
+     * 测试MySQL数据源的连接
      */
     @Test
     public void test02() {
@@ -60,4 +65,28 @@ public class ObjectMapperTest {
             log.debug(e.getMessage());
         }
     }
+
+    /**
+     * 支持Service_Name连接
+     * 测试Oracle数据源的连接
+     */
+    @Test
+    public void test03() {
+        DruidDataSource source = new DruidDataSource();
+        source.setUrl("jdbc:oracle:thin:@//120.76.202.102:49161/XE");
+        source.setUsername("system");
+        source.setPassword("oracle");
+        // source.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        try {
+            DruidPooledConnection connection = source.getConnection();
+            if (connection != null) {
+                System.out.println("连接成功");
+            } else {
+                System.out.println("连接失败");
+            }
+        } catch (SQLException e) {
+            log.debug(e.getMessage());
+        }
+    }
+
 }
