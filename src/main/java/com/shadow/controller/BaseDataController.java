@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName BaseDataController
@@ -72,5 +74,19 @@ public class BaseDataController {
             msg = "连接成功";
         }
         return new ResultVO<String>(msg);
+    }
+
+    /**
+     * 执行SQL语句
+     * @param dataSourceId
+     * @param sql
+     * @return
+     */
+    @PostMapping("/executeSql")
+    public ResultVO<List<Map>> executeSql(String dataSourceId, String sql) {
+        MiBaseDataSource datasource = dataSourceService.getById(dataSourceId);
+        DruidPooledConnection connection = DruidUtil.getConnection(datasource);
+        List<Map> resultSet = DruidUtil.ExecuteSQL(sql, connection);
+        return new ResultVO<>(resultSet);
     }
 }

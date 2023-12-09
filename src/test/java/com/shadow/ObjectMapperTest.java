@@ -8,12 +8,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shadow.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @ClassName ObjectMapperTest
@@ -23,8 +22,6 @@ import java.util.UUID;
  * @Version 1.0
  **/
 @Slf4j
-@SpringBootTest
-@RunWith(SpringRunner.class)
 public class ObjectMapperTest {
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -50,7 +47,7 @@ public class ObjectMapperTest {
     @Test
     public void test02() {
         DruidDataSource source = new DruidDataSource();
-        source.setUrl("jdbc:mysql://120.76.202.102:3306/snest-mi?useSSL=false&useUnicode=true&characterEncoding=utf-8");
+        source.setUrl("jdbc:mysql://120.76.202.102:3306/snest-mi");
         source.setUsername("root");
         source.setPassword("Liang2001...");
         source.setDriverClassName("com.mysql.cj.jdbc.Driver");
@@ -89,4 +86,47 @@ public class ObjectMapperTest {
         }
     }
 
+    @Test
+    public void test04() {
+        DruidDataSource source = new DruidDataSource();
+        source.setUrl("jdbc:mysql://120.76.202.102:3306/snest-mi");
+        source.setUsername("root");
+        source.setPassword("Liang2001...");
+        DruidPooledConnection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = source.getConnection();
+            String sql = "select * from rbac_user";
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            List<Map> result = new ArrayList<>();
+            while (resultSet.next()) {
+                int columnCount = resultSet.getMetaData().getColumnCount();
+                Map<String, Object> map = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = resultSet.getMetaData().getColumnLabel(i);
+                    Object value = resultSet.getObject(i);
+                    map.put(columnName, value);
+                }
+                result.add(map);
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            String resultJson = objectMapper.writeValueAsString(result);
+            System.out.println(resultJson);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+                preparedStatement.close();
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
