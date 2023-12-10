@@ -86,6 +86,9 @@ public class ObjectMapperTest {
         }
     }
 
+    /**
+     * 测试一下SQL的执行
+     */
     @Test
     public void test04() {
         DruidDataSource source = new DruidDataSource();
