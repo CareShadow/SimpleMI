@@ -25,4 +25,10 @@ public class ResultVO<T> {
         this.msg =  resultCode.getMsg();
         this.data = data;
     }
+
+    public ResultVO(int code, String msg, T data) {
+        this.code = code;
+        this.msg =  msg;
+        this.data = data;
+    }
 }
