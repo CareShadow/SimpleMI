@@ -2,16 +2,15 @@ package com.shadow.controller;
 
 import cn.hutool.core.lang.ObjectId;
 import com.alibaba.druid.pool.DruidPooledConnection;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shadow.domain.MiBaseDataSource;
 import com.shadow.service.MiBaseDataSourceService;
 import com.shadow.utils.DruidUtil;
 import com.shadow.vo.ResultVO;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +77,7 @@ public class BaseDataController {
 
     /**
      * 执行SQL语句
+     *
      * @param dataSourceId
      * @param sql
      * @return
@@ -88,5 +88,16 @@ public class BaseDataController {
         DruidPooledConnection connection = DruidUtil.getConnection(datasource);
         List<Map> resultSet = DruidUtil.ExecuteSQL(sql, connection);
         return new ResultVO<>(resultSet);
+    }
+
+    @GetMapping("/list")
+    public ResultVO<Map> dataSourceList() {
+        Map<String, Object> result = new HashMap<>();
+        List<MiBaseDataSource> list = dataSourceService
+                .list(new QueryWrapper<MiBaseDataSource>().select("id", "name", "host", "port", "create_user", "create_date"));
+        int count = dataSourceService.count();
+        result.put("count", count);
+        result.put("list", list);
+        return new ResultVO<>(result);
     }
 }

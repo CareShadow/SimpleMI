@@ -51,6 +51,8 @@ public class ObjectMapperTest {
         source.setUsername("root");
         source.setPassword("Liang2001...");
         source.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        source.setConnectionErrorRetryAttempts(2);
+        source.setBreakAfterAcquireFailure(true); // 开启重试次数
         try {
             DruidPooledConnection connection = source.getConnection();
             if (connection != null) {
