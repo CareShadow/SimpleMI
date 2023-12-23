@@ -1,7 +1,9 @@
 package com.shadow.controller;
 
 import com.shadow.domain.MiBaseDataSet;
+import com.shadow.enums.ResultCode;
 import com.shadow.service.MiBaseDataSetService;
+import com.shadow.vo.ResultBuilder;
 import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,13 +34,8 @@ public class DataSetController {
     @PostMapping("/insert")
     public ResultVO<String> insertDataSet(@RequestBody MiBaseDataSet miBaseDataSet) {
         boolean isSave = miBaseDataSetService.save(miBaseDataSet);
-        String msg = "";
-        if (isSave) {
-            msg = "保存成功";
-        } else {
-            msg = "保存失败";
-        }
-        return new ResultVO<>(msg);
+        String msg = isSave ? "保存成功" : "保存失败";
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 
     /**
@@ -49,13 +46,8 @@ public class DataSetController {
     @PostMapping("/edit")
     public ResultVO<String> editDataSet(@RequestBody MiBaseDataSet miBaseDataSet) {
         boolean isUpdate = miBaseDataSetService.updateById(miBaseDataSet);
-        String msg = "";
-        if (isUpdate) {
-            msg = "修改成功";
-        } else {
-            msg = "修改失败";
-        }
-        return new ResultVO<>(msg);
+        String msg = isUpdate ? "修改成功" : "修改失败";
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 
     /**
@@ -65,12 +57,7 @@ public class DataSetController {
      */
     public ResultVO<String> deleteDataSet(String dataSetId) {
         boolean isDelete = miBaseDataSetService.removeById(dataSetId);
-        String msg = "";
-        if (isDelete) {
-            msg = "删除成功";
-        } else {
-            msg = "删除失败";
-        }
-        return new ResultVO<>(msg);
+        String msg = isDelete ? "删除成功" : "删除失败";
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 }

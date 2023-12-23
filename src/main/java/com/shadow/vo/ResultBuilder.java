@@ -10,15 +10,37 @@ import com.shadow.enums.ResultCode;
  * @Version 1.0
  **/
 public class ResultBuilder {
-    public static <T> ResultVO ok(T data) {
+
+    /**
+     * 成功结果构造
+     * @param data
+     * @param <T>
+     * @return
+     */
+    public static <T> ResultVO<T> ok(T data) {
         return new ResultVO(ResultCode.SUCCESS, data);
     }
 
-    public static <T> ResultVO build(int code, String msg, T data) {
+    /**
+     * 自定义结果构造
+     * @param code
+     * @param msg
+     * @param data
+     * @param <T>
+     * @return
+     */
+    public static <T> ResultVO<T> build(int code, String msg, T data) {
         return new ResultVO(code, msg, data);
     }
 
-    public static <T> ResultVO create(ResultCode code, String msg) {
+    /**
+     * 消息结果构造
+     * @param code
+     * @param msg
+     * @param <T>
+     * @return
+     */
+    public static <T> ResultVO<T> create(ResultCode code, String msg) {
         return new ResultVO(code.getCode(), msg, null);
     }
 }

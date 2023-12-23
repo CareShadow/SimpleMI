@@ -4,8 +4,10 @@ import cn.hutool.core.lang.ObjectId;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shadow.domain.MiBaseDataSource;
+import com.shadow.enums.ResultCode;
 import com.shadow.service.MiBaseDataSourceService;
 import com.shadow.utils.DruidUtil;
+import com.shadow.vo.ResultBuilder;
 import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,7 @@ public class BaseDataController {
         dataSource.setId(ObjectId.next());
         boolean isSuccess = dataSourceService.save(dataSource);
         String msg = isSuccess ? "操作成功" : "操作失败";
-        return new ResultVO<String>(msg);
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 
     /**
@@ -53,7 +55,7 @@ public class BaseDataController {
     public ResultVO<String> editDataSource(@RequestBody MiBaseDataSource dataSource) {
         boolean isSuccess = dataSourceService.updateById(dataSource);
         String msg = isSuccess ? "操作成功" : "操作失败";
-        return new ResultVO<String>(msg);
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 
     /**
@@ -66,13 +68,8 @@ public class BaseDataController {
     public ResultVO<String> connectDataSource(String dataSourceId) {
         MiBaseDataSource datasource = dataSourceService.getById(dataSourceId);
         DruidPooledConnection connection = DruidUtil.getConnection(datasource);
-        String msg = "";
-        if (connection == null) {
-            msg = "连接失败";
-        } else {
-            msg = "连接成功";
-        }
-        return new ResultVO<String>(msg);
+        String msg = connection == null ? "连接失败" : "连接成功";
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 
     /**
@@ -87,17 +84,22 @@ public class BaseDataController {
         MiBaseDataSource datasource = dataSourceService.getById(dataSourceId);
         DruidPooledConnection connection = DruidUtil.getConnection(datasource);
         List<Map> resultSet = DruidUtil.ExecuteSQL(sql, connection);
-        return new ResultVO<>(resultSet);
+        return ResultBuilder.ok(resultSet);
     }
 
+    /**
+     * 获取数据源列表
+     * @return
+     */
     @GetMapping("/list")
     public ResultVO<Map> dataSourceList() {
         Map<String, Object> result = new HashMap<>();
         List<MiBaseDataSource> list = dataSourceService
-                .list(new QueryWrapper<MiBaseDataSource>().select("id", "name", "host", "port", "create_user", "create_date"));
+                .list(new QueryWrapper<MiBaseDataSource>()
+                        .select("id", "name", "host", "port", "create_user", "create_date", "type"));
         int count = dataSourceService.count();
         result.put("count", count);
         result.put("list", list);
-        return new ResultVO<>(result);
+        return ResultBuilder.ok(result);
     }
 }

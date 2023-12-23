@@ -9,6 +9,7 @@ import com.shadow.domain.RbacUser;
 import com.shadow.enums.ResultCode;
 import com.shadow.service.RbacUserService;
 import com.shadow.utils.JwtUtil;
+import com.shadow.vo.ResultBuilder;
 import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,13 +35,13 @@ public class AdminController {
      * @return
      */
     @PostMapping("/insert")
-    public String insertUser(@RequestBody RbacUser user) {
+    public ResultVO<Object> insertUser(@RequestBody RbacUser user) {
         user.setId(ObjectId.next());
         Digester md5 = new Digester(DigestAlgorithm.MD5);
         String digestHex = md5.digestHex(user.getPassword());
         user.setPassword(digestHex);
-        rbacUserService.save(user);
-        return "操作成功";
+        boolean isSave = rbacUserService.save(user);
+        return ResultBuilder.create(ResultCode.SUCCESS, "新增成功");
     }
 
     /**
@@ -56,8 +57,8 @@ public class AdminController {
                 .lambda().eq(RbacUser::getPassword, digestHex)
                 .eq(RbacUser::getLogin, user.getLogin()));
         String token = JwtUtil.generate(user.getLogin());
-        return rbacUser == null ? new ResultVO<String>(ResultCode.UNAUTHORIZED, "用户名或密码错误")
-                : new ResultVO<String>(token);
+        return rbacUser == null ? ResultBuilder.create(ResultCode.UNAUTHORIZED, "用户名或密码错误")
+                : ResultBuilder.ok(token);
     }
 
     /**
@@ -68,8 +69,6 @@ public class AdminController {
     @GetMapping("/userInfo")
     public ResultVO<String> userInfo() {
         String currentUserName = UserContext.getCurrentUserName();
-        return new ResultVO<String>(currentUserName);
+        return ResultBuilder.ok(currentUserName);
     }
-
-
 }

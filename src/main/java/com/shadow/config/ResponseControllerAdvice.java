@@ -2,6 +2,7 @@ package com.shadow.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shadow.vo.ResultBuilder;
 import com.shadow.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -33,12 +34,12 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
             // String类型特殊处理
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                return objectMapper.writeValueAsString(new ResultVO<>(data));
+                return objectMapper.writeValueAsString(ResultBuilder.ok(data));
             }catch (JsonProcessingException e) {
                 // e.printStackTrace();
                 log.debug(e.getMessage());
             }
         }
-        return new ResultVO<>(data);
+        return ResultBuilder.ok(data);
     }
 }

@@ -1,4 +1,4 @@
-FROM java:8
+FROM openjdk:8
 EXPOSE 8081
 LABEL authors="Administrator"
 ADD ./SimpleMI-1.0.0.jar /SimpleMI-1.0.0.jar
