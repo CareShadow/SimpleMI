@@ -5,10 +5,7 @@ import com.shadow.enums.ResultCode;
 import com.shadow.service.MiBaseDataSetService;
 import com.shadow.vo.ResultBuilder;
 import com.shadow.vo.ResultVO;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -55,6 +52,7 @@ public class DataSetController {
      * @param dataSetId
      * @return
      */
+    @GetMapping("/delete")
     public ResultVO<String> deleteDataSet(String dataSetId) {
         boolean isDelete = miBaseDataSetService.removeById(dataSetId);
         String msg = isDelete ? "删除成功" : "删除失败";

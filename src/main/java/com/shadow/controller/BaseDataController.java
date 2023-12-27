@@ -3,6 +3,7 @@ package com.shadow.controller;
 import cn.hutool.core.lang.ObjectId;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.shadow.context.UserContext;
 import com.shadow.domain.MiBaseDataSource;
 import com.shadow.enums.ResultCode;
 import com.shadow.service.MiBaseDataSourceService;
@@ -12,6 +13,7 @@ import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,8 @@ public class BaseDataController {
     @PostMapping("/insert")
     public ResultVO<String> insertDataSource(@RequestBody MiBaseDataSource dataSource) {
         dataSource.setId(ObjectId.next());
+        dataSource.setCreateUser(UserContext.getCurrentUserName());
+        dataSource.setCreateDate(new Date());
         boolean isSuccess = dataSourceService.save(dataSource);
         String msg = isSuccess ? "操作成功" : "操作失败";
         return ResultBuilder.create(ResultCode.SUCCESS, msg);
@@ -96,7 +100,7 @@ public class BaseDataController {
         Map<String, Object> result = new HashMap<>();
         List<MiBaseDataSource> list = dataSourceService
                 .list(new QueryWrapper<MiBaseDataSource>()
-                        .select("id", "name", "host", "port", "create_user", "create_date", "type"));
+                        .select("id", "name", "host", "port", "create_user", "create_date", "type", "database_name"));
         int count = dataSourceService.count();
         result.put("count", count);
         result.put("list", list);
