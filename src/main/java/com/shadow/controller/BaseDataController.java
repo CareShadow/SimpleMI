@@ -13,6 +13,7 @@ import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.xml.transform.Result;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -105,5 +106,16 @@ public class BaseDataController {
         result.put("count", count);
         result.put("list", list);
         return ResultBuilder.ok(result);
+    }
+
+    /**
+     * 获取数据源信息
+     * @param datasourceId
+     * @return
+     */
+    @GetMapping("/get/{datasourceId}")
+    public ResultVO<MiBaseDataSource> getDataSource(@PathVariable String datasourceId) {
+        MiBaseDataSource datasource = dataSourceService.getById(datasourceId);
+        return ResultBuilder.ok(datasource);
     }
 }
