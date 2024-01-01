@@ -13,7 +13,6 @@ import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.xml.transform.Result;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +93,7 @@ public class BaseDataController {
 
     /**
      * 获取数据源列表
+     *
      * @return
      */
     @GetMapping("/list")
@@ -110,6 +110,7 @@ public class BaseDataController {
 
     /**
      * 获取数据源信息
+     *
      * @param datasourceId
      * @return
      */
@@ -117,5 +118,18 @@ public class BaseDataController {
     public ResultVO<MiBaseDataSource> getDataSource(@PathVariable String datasourceId) {
         MiBaseDataSource datasource = dataSourceService.getById(datasourceId);
         return ResultBuilder.ok(datasource);
+    }
+
+    /**
+     * 删除数据源
+     * @param datasourceId
+     * @return
+     */
+    @GetMapping("/delete/{datasourceId}")
+    public ResultVO deleteDataSource(@PathVariable String datasourceId) {
+        // todo 数据集引用的数据集不能删除
+        boolean isDelete = dataSourceService.removeById(datasourceId);
+        String msg = isDelete ? "删除成功" : "删除失败";
+        return ResultBuilder.create(ResultCode.SUCCESS, msg);
     }
 }
