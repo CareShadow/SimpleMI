@@ -13,10 +13,7 @@ import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName BaseDataController
@@ -131,5 +128,24 @@ public class BaseDataController {
         boolean isDelete = dataSourceService.removeById(datasourceId);
         String msg = isDelete ? "删除成功" : "删除失败";
         return ResultBuilder.create(ResultCode.SUCCESS, msg);
+    }
+
+    /**
+     * 数据集绑定数据源列表
+     * @return
+     */
+    @GetMapping("/enums/list")
+    public ResultVO getDateSource() {
+        List<MiBaseDataSource> sources = dataSourceService.list();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (MiBaseDataSource source : sources) {
+            Map<String, Object> item = new HashMap<>();
+            String sourceCode = source.getId();
+            String name = source.getName();
+            item.put("code", sourceCode);
+            item.put("name", name);
+            result.add(item);
+        }
+        return ResultBuilder.ok(result);
     }
 }
