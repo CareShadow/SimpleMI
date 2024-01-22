@@ -1,10 +1,10 @@
 package com.shadow.controller;
 
 import cn.hutool.core.lang.ObjectId;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shadow.context.UserContext;
 import com.shadow.domain.MiBaseDataSet;
 import com.shadow.enums.ResultCode;
+import com.shadow.pojo.DataSet;
 import com.shadow.service.MiBaseDataSetService;
 import com.shadow.vo.ResultBuilder;
 import com.shadow.vo.ResultVO;
@@ -37,9 +37,7 @@ public class DataSetController {
     @GetMapping("list")
     public ResultVO<Map> dataSetList() {
         Map<String, Object> result = new HashMap<>();
-        List<MiBaseDataSet> list = miBaseDataSetService
-                .list(new QueryWrapper<MiBaseDataSet>()
-                        .select("id", "name", "type", "source_id", "create_user", "create_date", "create_user", "create_date"));
+        List<DataSet> list = miBaseDataSetService.getDataSetList();
         int count = miBaseDataSetService.count();
         result.put("count", count);
         result.put("list", list);
@@ -86,5 +84,17 @@ public class DataSetController {
         boolean isDelete = miBaseDataSetService.removeById(dataSetId);
         String msg = isDelete ? "删除成功" : "删除失败";
         return ResultBuilder.create(ResultCode.SUCCESS, msg);
+    }
+
+    /**
+     * 获取数据集信息
+     *
+     * @param datasetId
+     * @return
+     */
+    @GetMapping("/get/{datasetId}")
+    public ResultVO<MiBaseDataSet> getDataSet(@PathVariable String datasetId) {
+        MiBaseDataSet dataSet = miBaseDataSetService.getById(datasetId);
+        return ResultBuilder.ok(dataSet);
     }
 }

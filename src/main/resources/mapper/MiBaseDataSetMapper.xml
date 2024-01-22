@@ -5,20 +5,35 @@
 <mapper namespace="com.shadow.mapper.MiBaseDataSetMapper">
 
     <resultMap id="BaseResultMap" type="com.shadow.domain.MiBaseDataSet">
-            <id property="id" column="id" jdbcType="VARCHAR"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="type" column="type" jdbcType="VARCHAR"/>
-            <result property="sourceId" column="source_id" jdbcType="VARCHAR"/>
-            <result property="executeSql" column="execute_sql" jdbcType="BLOB"/>
-            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
-            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
-            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
-            <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="sourceId" column="source_id" jdbcType="VARCHAR"/>
+        <result property="executeSql" column="execute_sql" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,type,
-        source_id,create_user,create_date,
-        update_user,update_date,execute_sql
+        id
+        ,name,type,
+        source_id,execute_sql,create_user,
+        create_date,update_user,update_date
     </sql>
+
+    <select id="getDataSetList" resultType="com.shadow.pojo.DataSet">
+        select a.id
+             , a.name
+             , a.type
+             , b.name as sourceName
+             , a.create_user
+             , a.create_date
+             , a.update_user
+             , a.update_date
+        from mi_base_data_set a
+                 left join mi_base_data_source b
+                           on a.source_id = b.id;
+    </select>
 </mapper>

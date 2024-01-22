@@ -24,6 +24,7 @@ public class MIWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/admin/**")
                 .addPathPatterns("/base/**")
+                .addPathPatterns("/dataset/**")
                 .excludePathPatterns("/admin/login");
     }
 }

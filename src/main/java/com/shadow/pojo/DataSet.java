@@ -1,4 +1,4 @@
-package com.shadow.domain;
+package com.shadow.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -7,11 +7,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * mi_base_data_set
- * @TableName mi_base_data_set
- */
+ * @ClassName DataSet
+ * @Description TODO
+ * @Author CareShadow
+ * @Date 2024/1/22 21:26
+ * @Version 1.0
+ **/
 @Data
-public class MiBaseDataSet implements Serializable {
+public class DataSet implements Serializable {
     /**
      * 主键
      */
@@ -30,7 +33,7 @@ public class MiBaseDataSet implements Serializable {
     /**
      * 数据源ID
      */
-    private String sourceId;
+    private String sourceName;
 
     /**
      * 执行SQL
