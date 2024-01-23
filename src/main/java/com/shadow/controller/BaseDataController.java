@@ -4,6 +4,7 @@ import cn.hutool.core.lang.ObjectId;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shadow.context.UserContext;
+import com.shadow.domain.MiBaseDataSet;
 import com.shadow.domain.MiBaseDataSource;
 import com.shadow.enums.ResultCode;
 import com.shadow.service.MiBaseDataSourceService;
@@ -76,12 +77,13 @@ public class BaseDataController {
     /**
      * 执行SQL语句
      *
-     * @param dataSourceId
-     * @param sql
+     * @param dataset
      * @return
      */
     @PostMapping("/executeSql")
-    public ResultVO<List<Map>> executeSql(String dataSourceId, String sql) {
+    public ResultVO<List<Map>> executeSql(@RequestBody MiBaseDataSet dataset) {
+        String dataSourceId = dataset.getSourceId();
+        String sql = dataset.getExecuteSql();
         MiBaseDataSource datasource = dataSourceService.getById(dataSourceId);
         DruidPooledConnection connection = DruidUtil.getConnection(datasource);
         List<Map> resultSet = DruidUtil.ExecuteSQL(sql, connection);
@@ -119,6 +121,7 @@ public class BaseDataController {
 
     /**
      * 删除数据源
+     *
      * @param datasourceId
      * @return
      */
@@ -132,6 +135,7 @@ public class BaseDataController {
 
     /**
      * 数据集绑定数据源列表
+     *
      * @return
      */
     @GetMapping("/enums/list")
