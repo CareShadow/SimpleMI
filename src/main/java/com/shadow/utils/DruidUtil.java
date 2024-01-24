@@ -22,7 +22,7 @@ import java.util.Map;
  **/
 @Slf4j
 public final class DruidUtil {
-    private final static Map<String, DruidDataSource> dataSources = new HashMap<>();
+    private final static Map<String, DruidDataSource> DATASOURCES = new HashMap<>();
 
     /**
      * @param dataSource
@@ -32,19 +32,22 @@ public final class DruidUtil {
     public static DruidPooledConnection getConnection(MiBaseDataSource dataSource) {
         DruidDataSource source = null;
         String datasourceId = dataSource.getId();
-        if (dataSources.get(datasourceId) == null) {
+        if (DATASOURCES.get(datasourceId) == null) {
             source = new DruidDataSource();
-            dataSources.put(datasourceId, source);
+            String dataUrl = getUrlHeader(dataSource);
+            log.debug("数据库的URL为{}", dataUrl);
+            source.setUrl(dataUrl);
+            source.setUsername(dataSource.getUser());
+            source.setPassword(dataSource.getPassword());
+            source.setBreakAfterAcquireFailure(true); // 开启重试次数
+            source.setConnectionErrorRetryAttempts(2);  // 设置重试次数为2
+            source.setTestWhileIdle(true); // 开启空闲连接检测
+            source.setTimeBetweenEvictionRunsMillis(60000); // 设置检验时间间隔
+            source.setMinEvictableIdleTimeMillis(300000); // 设置连接的存活时间
+            DATASOURCES.put(datasourceId, source);
         } else {
-            source = dataSources.get(datasourceId);
+            source = DATASOURCES.get(datasourceId);
         }
-        String dataUrl = getUrlHeader(dataSource);
-        log.debug("数据库的URL为{}", dataUrl);
-        source.setUrl(dataUrl);
-        source.setUsername(dataSource.getUser());
-        source.setPassword(dataSource.getPassword());
-        source.setConnectionErrorRetryAttempts(2);  // 设置重试次数为2
-        source.setBreakAfterAcquireFailure(true); // 开启重试次数
         try {
             DruidPooledConnection connection = source.getConnection();
             return connection;
@@ -76,20 +79,16 @@ public final class DruidUtil {
                 break;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(urlHeader).append(dataSource.getHost())
-                .append(":").append(dataSource.getPort())
-                .append("/").append(dataSource.getDatabaseName());
+        sb.append(urlHeader).append(dataSource.getHost()).append(":").append(dataSource.getPort()).append("/").append(dataSource.getDatabaseName());
         String dataUrl = sb.toString();
         return dataUrl;
     }
 
-    public static List<Map> ExecuteSQL(String sql, DruidPooledConnection connection) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+    public static List<Map> ExecuteSQL(String sql, DruidPooledConnection connection) throws SQLException {
+        List<Map> result = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            List<Map> result = new ArrayList<>();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int columnCount = resultSet.getMetaData().getColumnCount();
                 Map<String, Object> map = new HashMap<>();
@@ -100,18 +99,9 @@ public final class DruidUtil {
                 }
                 result.add(map);
             }
-            return result;
         } catch (SQLException e) {
-            log.debug(e.getMessage());
-        } finally {
-            try {
-                preparedStatement.close();
-                resultSet.close();
-                connection.close();
-            } catch (SQLException e) {
-                log.debug(e.getMessage());
-            }
+            throw e;
         }
-        return null;
+        return result;
     }
 }

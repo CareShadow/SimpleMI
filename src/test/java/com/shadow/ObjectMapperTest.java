@@ -1,6 +1,8 @@
 package com.shadow;
 
 import cn.hutool.core.lang.ObjectId;
+import cn.hutool.crypto.digest.DigestAlgorithm;
+import cn.hutool.crypto.digest.Digester;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,8 +39,9 @@ public class ObjectMapperTest {
 
     @Test
     public void test01() {
-        String id = ObjectId.next();
-        System.out.println(id);
+        Digester md5 = new Digester(DigestAlgorithm.MD5);
+        String digestHex = md5.digestHex("Liang2001...");
+        System.out.println(digestHex);
     }
 
     /**
@@ -102,7 +105,7 @@ public class ObjectMapperTest {
         ResultSet resultSet = null;
         try {
             connection = source.getConnection();
-            String sql = "select * from rbac_user";
+            String sql = "select * from table";
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             List<Map> result = new ArrayList<>();
@@ -119,19 +122,8 @@ public class ObjectMapperTest {
             ObjectMapper objectMapper = new ObjectMapper();
             String resultJson = objectMapper.writeValueAsString(result);
             System.out.println(resultJson);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-                preparedStatement.close();
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } catch (SQLException | JsonProcessingException e) {
+            log.error(e.getMessage());
         }
-
     }
 }

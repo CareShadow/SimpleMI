@@ -1,5 +1,7 @@
 package com.shadow.config;
 
+import com.shadow.vo.ResultBuilder;
+import com.shadow.vo.ResultVO;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +29,7 @@ public class ExceptionControllerAdvice {
 
 
     @ExceptionHandler(SQLException.class)
-    public String SQLExceptionHandle(SQLException e) {
-        return e.getMessage();
+    public ResultVO<String> SQLExceptionHandle(SQLException e) {
+        return ResultBuilder.build(500, e.getMessage(), null);
     }
 }

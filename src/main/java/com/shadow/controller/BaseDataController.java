@@ -14,6 +14,7 @@ import com.shadow.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -81,7 +82,7 @@ public class BaseDataController {
      * @return
      */
     @PostMapping("/executeSql")
-    public ResultVO<List<Map>> executeSql(@RequestBody MiBaseDataSet dataset) {
+    public ResultVO<List<Map>> executeSql(@RequestBody MiBaseDataSet dataset) throws SQLException {
         String dataSourceId = dataset.getSourceId();
         String sql = dataset.getExecuteSql();
         MiBaseDataSource datasource = dataSourceService.getById(dataSourceId);
