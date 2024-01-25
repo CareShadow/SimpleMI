@@ -8,10 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * @ClassName DruidUtil
@@ -91,10 +90,16 @@ public final class DruidUtil {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int columnCount = resultSet.getMetaData().getColumnCount();
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new LinkedHashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = resultSet.getMetaData().getColumnLabel(i);
                     Object value = resultSet.getObject(i);
+                    // 对原始的timestamp类型进行处理
+                    if (value instanceof Timestamp) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        String format = ((Timestamp) value).toLocalDateTime().format(formatter);
+                        value = format;
+                    }
                     map.put(columnName, value);
                 }
                 result.add(map);
