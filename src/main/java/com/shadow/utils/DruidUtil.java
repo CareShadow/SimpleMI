@@ -76,6 +76,8 @@ public final class DruidUtil {
             case "ClickHouse":
                 urlHeader = "jdbc:clickhouse://";
                 break;
+            default:
+                throw new RuntimeException("暂不支持该数据库");
         }
         StringBuilder sb = new StringBuilder();
         sb.append(urlHeader).append(dataSource.getHost()).append(":").append(dataSource.getPort()).append("/").append(dataSource.getDatabaseName());

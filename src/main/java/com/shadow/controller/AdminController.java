@@ -36,6 +36,11 @@ public class AdminController {
      */
     @PostMapping("/insert")
     public ResultVO<Object> insertUser(@RequestBody RbacUser user) {
+        RbacUser entity = rbacUserService.getOne(new QueryWrapper<RbacUser>().lambda()
+                .eq(RbacUser::getLogin, user.getLogin()));
+        if (entity != null) {
+            return ResultBuilder.create(ResultCode.SUCCESS, "该用户名已存在，请注册不同的用户名");
+        }
         user.setId(ObjectId.next());
         Digester md5 = new Digester(DigestAlgorithm.MD5);
         String digestHex = md5.digestHex(user.getPassword());
@@ -53,12 +58,9 @@ public class AdminController {
     public ResultVO<String> login(@RequestBody RbacUser user) {
         Digester md5 = new Digester(DigestAlgorithm.MD5);
         String digestHex = md5.digestHex(user.getPassword());
-        RbacUser rbacUser = rbacUserService.getOne(new QueryWrapper<RbacUser>()
-                .lambda().eq(RbacUser::getPassword, digestHex)
-                .eq(RbacUser::getLogin, user.getLogin()));
+        RbacUser rbacUser = rbacUserService.getOne(new QueryWrapper<RbacUser>().lambda().eq(RbacUser::getPassword, digestHex).eq(RbacUser::getLogin, user.getLogin()));
         String token = JwtUtil.generate(user.getLogin());
-        return rbacUser == null ? ResultBuilder.create(ResultCode.UNAUTHORIZED, "用户名或密码错误")
-                : ResultBuilder.ok(token);
+        return rbacUser == null ? ResultBuilder.create(ResultCode.UNAUTHORIZED, "用户名或密码错误") : ResultBuilder.ok(token);
     }
 
     /**
@@ -69,6 +71,11 @@ public class AdminController {
     @GetMapping("/userInfo")
     public ResultVO<String> userInfo() {
         String currentUserName = UserContext.getCurrentUserName();
-        return ResultBuilder.ok(currentUserName);
+        RbacUser user = rbacUserService.getOne(
+                new QueryWrapper<RbacUser>()
+                        .lambda()
+                        .eq(RbacUser::getLogin, currentUserName));
+        String name = user.getName();
+        return ResultBuilder.ok(name);
     }
 }
