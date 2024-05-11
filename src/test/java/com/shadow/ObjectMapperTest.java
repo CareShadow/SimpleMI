@@ -52,7 +52,7 @@ public class ObjectMapperTest {
         DruidDataSource source = new DruidDataSource();
         source.setUrl("jdbc:mysql://120.76.202.102:3306/snest-mi");
         source.setUsername("root");
-        source.setPassword("Liang2001...");
+        source.setPassword("careshadow...");
         source.setDriverClassName("com.mysql.cj.jdbc.Driver");
         source.setConnectionErrorRetryAttempts(2);
         source.setBreakAfterAcquireFailure(true); // 开启重试次数
@@ -99,7 +99,7 @@ public class ObjectMapperTest {
         DruidDataSource source = new DruidDataSource();
         source.setUrl("jdbc:mysql://120.76.202.102:3306/snest-mi");
         source.setUsername("root");
-        source.setPassword("Liang2001...");
+        source.setPassword("careshadow...");
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

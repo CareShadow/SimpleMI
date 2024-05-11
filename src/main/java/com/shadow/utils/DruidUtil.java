@@ -29,7 +29,8 @@ public final class DruidUtil {
      * @Description 获取一个连接池, 并生成一个连接
      */
     public static DruidPooledConnection getConnection(MiBaseDataSource dataSource) {
-        DruidDataSource source = null;
+        DruidDataSource source;
+        DruidPooledConnection connection = null;
         String datasourceId = dataSource.getId();
         if (DATASOURCES.get(datasourceId) == null) {
             source = new DruidDataSource();
@@ -48,12 +49,11 @@ public final class DruidUtil {
             source = DATASOURCES.get(datasourceId);
         }
         try {
-            DruidPooledConnection connection = source.getConnection();
-            return connection;
+            connection = source.getConnection();
         } catch (SQLException e) {
             log.debug(e.getMessage());
         }
-        return null;
+        return connection;
     }
 
     /**
